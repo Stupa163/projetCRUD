@@ -30,3 +30,8 @@ block content
             option(value='F', selected=client.civilite === 'F') F
         <br> <br>
         input(type='submit', value='enregistrer')
+
+    ul
+    each commande in commandes
+        li
+            a(href='/commande/' + commande.id_commande) Commande n°#{commande.id_commande}

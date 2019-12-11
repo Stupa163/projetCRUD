@@ -19,9 +19,18 @@ router.get('/:id', function(req, res, next) {
 
     if (result.length === 0) {
       res.send('Impossible de trouver un client avec cet id')
-    } else {
-      res.render('clientDetails', {client: result[0]})
     }
+
+    let query2 = 'SELECT * FROM commande WHERE commande.id_client=' + req.params.id
+
+    con.query(query2, (err2, result2) => {
+      if (err2) {
+        throw err2
+      }
+
+      res.render('clientDetails', {client: result[0], commandes: result2})
+    })
+
   })
 });
 

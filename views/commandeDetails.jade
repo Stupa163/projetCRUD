@@ -1,0 +1,26 @@
+extends layout
+
+block content
+    a(href='/') Retour à la liste
+    <br> <br>
+    a(href='/users/' + produits[0].id_client) Retour au client
+
+    - var date = new Date(produits[0].date_commande)
+    - var val = date.getFullYear() + '-' + (((date.getMonth() + 1) < 10) ? '0' : '') + (date.getMonth() + 1) + '-' + (((date.getDate() + 1) < 10) ? '0' : '') + date.getDate()
+    - var total = 0;
+
+    h1='Commande n°' + produits[0].id_commande
+    h2='Passée le ' + val
+    h3='Elle comporte : '
+
+    ul
+    each produit in produits
+        if produit.taux_remise !== 0
+            li= produit.quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€ avec ' + produit.taux_remise + '% de remise'
+        else
+            li= produit.quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€'
+        - var sousTotal = (1 - ((produit.taux_remise) / 100)) * produit.prix_unitaire * produit.quantite;
+        - total += sousTotal;
+        p(style='margin-left: 30px')='Sous total : ' + sousTotal + '€'
+
+    h3='Total de la commande : ' + total + '€'
