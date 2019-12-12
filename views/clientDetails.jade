@@ -1,8 +1,7 @@
 extends layout
 
 block content
-    a(href='/') Retour à la liste
-
+    <br> <br>
     h1='Client n°' + client.id_client
 
     - var date = new Date(client.date_naissance)
@@ -33,5 +32,8 @@ block content
 
     ul
     each commande in commandes
-        li
-            a(href='/commande/' + commande.id_commande) Commande n°#{commande.id_commande}
+        li.commande(onclick='afficherInfosCommande(#{commande.id_commande})') Commande n°#{commande.id_commande}
+
+    #detailsCommandes
+
+    script(src='/javascripts/clientDetail.js')

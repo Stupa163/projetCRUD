@@ -1,10 +1,7 @@
 extends layout
 
 block content
-    a(href='/') Retour à la liste
     <br> <br>
-    a(href='/users/' + produits[0].id_client) Retour au client
-
     - var date = new Date(produits[0].date_commande)
     - var val = date.getFullYear() + '-' + (((date.getMonth() + 1) < 10) ? '0' : '') + (date.getMonth() + 1) + '-' + (((date.getDate() + 1) < 10) ? '0' : '') + date.getDate()
     - var total = 0;
