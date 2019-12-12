@@ -34,7 +34,6 @@ router.get('/:id', function(req, res, next) {
 });
 
 router.post('/:id', (req, res, next) => {
-
   Models.client.update({
     nom: req.body.nom,
     prenom: req.body.prenom,
@@ -43,7 +42,13 @@ router.post('/:id', (req, res, next) => {
     civilite: req.body.civilite,
   }, {where: {id_client: req.params.id}})
     .then(() => {
-      res.redirect('/users/' + req.params.id)
+      Models.client.findAll()
+        .then((clients) => {
+          res.render('index', {title: 'Express', clients: clients})
+        })
+        .catch((error) => {
+          res.status(error.status || 500).send(error.message)
+        })
     })
     .catch((error) => {
       res.status(error.status || 500).send(error.message)
