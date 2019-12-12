@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 let mysql = require('mysql');
+const Models = require('../models');
 
 let con = mysql.createConnection({
   host: 'localhost',
@@ -11,46 +12,42 @@ let con = mysql.createConnection({
 
 /* GET users listing. */
 router.get('/:id', function(req, res, next) {
-  let query = 'SELECT * FROM client WHERE client.id_client=' + req.params.id
-  con.query(query, (err, result) => {
-    if(err) {
-      throw err
-    }
 
-    if (result.length === 0) {
-      res.send('Impossible de trouver un client avec cet id')
-    }
-
-    let query2 = 'SELECT * FROM commande WHERE commande.id_client=' + req.params.id
-
-    con.query(query2, (err2, result2) => {
-      if (err2) {
-        throw err2
-      }
-
-      res.render('clientDetails', {client: result[0], commandes: result2})
+  Models.client.findOne({
+    where: {id_client: req.params.id}
+  })
+    .then((client) => {
+      Models.commande.findAll({
+        where: {'id_client': req.params.id}
+      })
+        .then((commandes) => {
+          res.render('clientDetails', {client: client, commandes: commandes})
+        })
+        .catch((error) => {
+          res.status(error.status || 500).send(error.message)
+        })
+    })
+    .catch((error) => {
+      res.status(error.status || 500).send(error.message)
     })
 
-  })
 });
 
 router.post('/:id', (req, res, next) => {
-  let query = 'UPDATE client SET ' +
-    'nom="' + req.body.nom + '",' +
-    'prenom="' + req.body.prenom + '",' +
-    'adresse="' + req.body.adresse + '",' +
-    'date_naissance="' + req.body.date_naissance + '",' +
-    'numero="' + req.body.numero + '",' +
-    'civilite="' + req.body.civilite + '" ' +
-    'WHERE client.id_client=' + req.params.id
 
-  con.query(query, (err, result) => {
-    if (err){
-      throw err
-    }
-
-    res.redirect('/users/' + req.params.id)
-  })
+  Models.client.update({
+    nom: req.body.nom,
+    prenom: req.body.prenom,
+    adresse: req.body.adresse,
+    date_naissance: req.body.date_naissance,
+    civilite: req.body.civilite,
+  }, {where: {id_client: req.params.id}})
+    .then(() => {
+      res.redirect('/users/' + req.params.id)
+    })
+    .catch((error) => {
+      res.status(error.status || 500).send(error.message)
+    })
 })
 
 module.exports = router;

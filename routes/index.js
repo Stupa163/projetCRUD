@@ -1,21 +1,16 @@
 var express = require('express');
 var router = express.Router();
-
-let mysql = require('mysql');
-
-let con = mysql.createConnection({
-  host: 'localhost',
-  database: 'projet',
-  user: 'root',
-  password: null
-})
+const Models = require('../models');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  let query = 'SELECT * FROM client;'
-  con.query(query, (err, result) => {
-    res.render('index', { title: 'Express', clients: result });
-  })
+  Models.client.findAll()
+    .then((clients) => {
+      res.render('index', {title: 'Express', clients: clients})
+    })
+    .catch((error) => {
+      res.status(error.status || 500).send(error.message)
+    })
 });
 
 module.exports = router;
