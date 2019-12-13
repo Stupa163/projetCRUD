@@ -2,21 +2,21 @@ extends layout
 
 block content
     <br> <br>
-    - var date = new Date(produits[0].date_commande)
+    - var date = new Date(commande.date_commande)
     - var val = date.getFullYear() + '-' + (((date.getMonth() + 1) < 10) ? '0' : '') + (date.getMonth() + 1) + '-' + (((date.getDate() + 1) < 10) ? '0' : '') + date.getDate()
     - var total = 0;
 
-    h1='Commande n°' + produits[0].id_commande
+    h1='Commande n°' + commande.id_commande
     h2='Passée le ' + val
     h3='Elle comporte : '
 
     ul
-    each produit in produits
-        if produit.taux_remise !== 0
-            li= produit.quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€ avec ' + produit.taux_remise + '% de remise'
+    each produit, key in produits
+        if commandes_produit[key].taux_remise !== 0
+            li= commandes_produit[key].quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€ avec ' + commandes_produit[key].taux_remise + '% de remise'
         else
-            li= produit.quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€'
-        - var sousTotal = (1 - ((produit.taux_remise) / 100)) * produit.prix_unitaire * produit.quantite;
+            li= commandes_produit[key].quantite + ' fois le produit "' + produit.libelle + '" à ' + produit.prix_unitaire + '€'
+        - var sousTotal = (1 - ((commandes_produit[key].taux_remise) / 100)) * produit.prix_unitaire * commandes_produit[key].quantite;
         - total += sousTotal;
         p(style='margin-left: 30px')='Sous total : ' + sousTotal + '€'
 

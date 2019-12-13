@@ -3,19 +3,9 @@ var router = express.Router();
 let mysql = require('mysql');
 const Models = require('../models');
 
-let con = mysql.createConnection({
-  host: 'localhost',
-  database: 'projet',
-  user: 'root',
-  password: null
-})
-
 /* GET users listing. */
 router.get('/:id', function(req, res, next) {
-
-  Models.client.findOne({
-    where: {id_client: req.params.id}
-  })
+  Models.client.findByPk(req.params.id)
     .then((client) => {
       Models.commande.findAll({
         where: {'id_client': req.params.id}
@@ -30,7 +20,6 @@ router.get('/:id', function(req, res, next) {
     .catch((error) => {
       res.status(error.status || 500).send(error.message)
     })
-
 });
 
 router.post('/:id', (req, res, next) => {
