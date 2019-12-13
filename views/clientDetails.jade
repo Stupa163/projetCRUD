@@ -5,6 +5,8 @@ block content
     h1='Client n°' + client.id_client
 
     - var date = new Date(client.date_naissance)
+    - var id_ville = (ville !== null) ? ville.id_ville : null;
+    - var nom_ville = (ville !== null) ? ville.nom + ' (' + ville.code_postal + ')' : null;
     - var val = date.getFullYear() + '-' + (((date.getMonth() + 1) < 10) ? '0' : '') + (date.getMonth() + 1) + '-' + (((date.getDate() + 1) < 10) ? '0' : '') + date.getDate()
 
     form(method='POST', action='/users/' + client.id_client)
@@ -13,6 +15,11 @@ block content
         <br> <br>
         label(for='prenom') Prenom :
         input#prenom(type='text', name='prenom', value=client.prenom)
+        <br> <br>
+        label(for='civilite') Civilite :
+        select#civilite(name='civilite')
+            option(value='M', selected=client.civilite === 'M') M
+            option(value='F', selected=client.civilite === 'F') F
         <br> <br>
         label(for='adresse') Adresse :
         input#adresse(type='text', name='adresse', value=client.adresse)
@@ -23,10 +30,10 @@ block content
         label(for='numero') Numéro :
         input#numero(type='text', name='numero', value=client.numero)
         <br> <br>
-        label(for='civilite') Civilite :
-        select#civilite(name='civilite')
-            option(value='M', selected=client.civilite === 'M') M
-            option(value='F', selected=client.civilite === 'F') F
+        .ui-widget
+            label(for='ville') Ville :
+            input#ville(type='hidden', name='ville', value=id_ville)
+            input#labelVille(type='text', name='labelVille' value=nom_ville)
         <br> <br>
         input(type='submit', value='enregistrer')
 
