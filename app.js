@@ -8,6 +8,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var commandesRouter = require('./routes/commandes');
 var villesRouter = require('./routes/villes');
+var loginRouter = require('./routes/login');
+
+const securityMiddleware = require('./security/securite');
 
 var app = express();
 
@@ -21,7 +24,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/login', loginRouter);
 app.use('/', indexRouter);
+
+app.use(securityMiddleware.authentification());
+
 app.use('/users', usersRouter);
 app.use('/commande', commandesRouter);
 app.use('/villes', villesRouter);

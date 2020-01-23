@@ -2,7 +2,8 @@ $('form').submit(function (e) {
   e.preventDefault()
   $.ajax({
     url: $(this)[0].action,
-      method: 'PUT',
+    headers: {token: sessionStorage.getItem('token')},
+    method: 'PUT',
     data: $(this).serialize()
   }).then((data) => {
     $('#container').html(data);
@@ -23,6 +24,7 @@ $(document).ready(() => {
     source: (req, res) => {
       $.ajax({
         url: '/villes/' + req.term,
+        headers: {token: sessionStorage.getItem('token')},
         method: 'GET'
       }).then((data) => {
         res(data)
