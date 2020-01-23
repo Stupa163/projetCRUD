@@ -6,4 +6,7 @@ function afficherInfos (id) {
   }).then((data) => {
     $('#detailsClient').html(data)
   })
+    .catch((error) => {
+      alert('Vous devez vous connecter')
+    })
 }
